@@ -15,25 +15,25 @@ export const Card: FC<CardProps> = ({
 }) => {
   const { colors } = useTheme();
 
-  const iconNamePerType = {
+  const iconName = {
     inflow: 'arrow-up-circle',
     outflow: 'arrow-down-circle',
     total: 'dollar-sign',
-  };
+  }[type];
 
-  const iconColorPerType = {
+  const iconColor = {
     inflow: colors.success.normal,
     outflow: colors.attention.normal,
     total: colors.shape,
-  }
+  }[type];
 
   return (
     <S.Container type={type}>
       <S.Header>
         <S.Title type={type}>{title}</S.Title>
         <S.Icon 
-          name={iconNamePerType[type]} 
-          color={iconColorPerType[type]}
+          name={iconName} 
+          color={iconColor}
         />
       </S.Header>
 
