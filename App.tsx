@@ -9,7 +9,7 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 
 //screens
-import { Dashboard } from './src/screens/Dashboard';
+import { Dashboard } from './src/screens/Dashboard/Dashboard';
 
 //styles
 import { theme } from './src/styles/theme';
