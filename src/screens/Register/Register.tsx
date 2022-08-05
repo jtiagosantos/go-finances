@@ -1,27 +1,45 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-native';
+import { 
+  Modal, 
+  TouchableWithoutFeedback, 
+  Keyboard,
+  Alert,
+} from 'react-native';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 //components
 import { Header } from '../../components/Header/Header';
-import { Input } from '../../components/Form/Input/Input';
 import { Button } from '../../components/Form/Button/Button';
 import { 
   TransactionTypeButton 
 } from '../../components/Form/TransactionTypeButton/TransactionTypeButton';
 import { SelectCategory } from '../../components/Form/SelectCategory/SelectCategory';
 import { CategorySelect } from '../CategorySelect/CategorySelect';
+import { ControlledInput } from '../../components/Form/ControlledInput/ControlledInput';
 
 //hooks
 import { useDisclosure } from '../../hooks/useDisclosure';
 
+//schemas
+import { schema } from './schema';
+
 //types
-import { TransactionType } from './types';
+import { TransactionType, FormData } from './types';
 
 //styles
 import * as S from './styles';
 
 export const Register = () => {
   const { isOpen, onToggle } = useDisclosure();
+
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+    defaultValues: {
+      name: '',
+      amount: '',
+    },
+    resolver: yupResolver(schema),
+  });
 
   const [
     selectedTransactionType, 
@@ -40,51 +58,90 @@ export const Register = () => {
     return selectedTransactionType === type;
   }
 
+  const handleRegister = (formData: FormData) => {
+    if (!selectedTransactionType) {
+      return Alert.alert(
+        'Campo obrigatório', 
+        'Selecione o tipo da transação',
+      );
+    }
+
+    if (category.key === 'category') {
+      return Alert.alert(
+        'Campo obrigatório', 
+        'Selecione a categoria da transação',
+      );
+    }
+
+    const { name, amount } = formData;
+
+    const data = {
+      name,
+      amount,
+      transactionType: selectedTransactionType,
+      category: category.name,
+    }
+
+    console.log(data)
+  }
+
   return (
-    <S.Container>
-      <Header title="Cadastro" />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <S.Container>
+        <Header title="Cadastro" />
 
-      <S.Form>
-        <S.Fields>
-          <Input 
-            placeholder="Nome"
-          />
-          <Input 
-            placeholder="Preço"
-          />
-
-          <S.TransactionTypes>
-            <TransactionTypeButton 
-              title='Income'
-              type='inflow'
-              onPress={() => handleSelectTransactionType('inflow')}
-              isSelected={checkIsSelected('inflow')}
+        <S.Form>
+          <S.Fields>
+            <ControlledInput 
+              control={control}
+              name="name"
+              placeholder="Nome"
+              autoCapitalize="sentences"
+              autoCorrect={false}
+              error={errors.name?.message}
             />
-            <TransactionTypeButton 
-              title='Outcome'
-              type='outflow'
-              onPress={() => handleSelectTransactionType('outflow')}
-              isSelected={checkIsSelected('outflow')}
+            <ControlledInput 
+              control={control}
+              name="amount"
+              placeholder="Preço"
+              keyboardType="numeric"
+              error={errors.amount?.message}
             />
-          </S.TransactionTypes>
 
-          <SelectCategory 
-            title={category.name}
-            onPress={onToggle}
+            <S.TransactionTypes>
+              <TransactionTypeButton 
+                title='Income'
+                type='inflow'
+                onPress={() => handleSelectTransactionType('inflow')}
+                isSelected={checkIsSelected('inflow')}
+              />
+              <TransactionTypeButton 
+                title='Outcome'
+                type='outflow'
+                onPress={() => handleSelectTransactionType('outflow')}
+                isSelected={checkIsSelected('outflow')}
+              />
+            </S.TransactionTypes>
+
+            <SelectCategory 
+              title={category.name}
+              onPress={onToggle}
+            />
+          </S.Fields>
+          <Button 
+            title="Enviar"
+            onPress={handleSubmit(handleRegister)}
           />
-        </S.Fields>
-        <Button 
-          title="Enviar"
-        />
-      </S.Form>
+        </S.Form>
 
-      <Modal visible={isOpen} statusBarTranslucent>
-        <CategorySelect 
-          category={category}
-          setCategory={setCategory}
-          onCloseCategorySelect={onToggle}
-        />
-      </Modal>
-    </S.Container>
+        <Modal visible={isOpen} statusBarTranslucent>
+          <CategorySelect 
+            category={category}
+            setCategory={setCategory}
+            onCloseCategorySelect={onToggle}
+          />
+        </Modal>
+      </S.Container>
+    </TouchableWithoutFeedback>
   );
 }
