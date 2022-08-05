@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
-
-//hooks
-import { useTheme } from '../../../hooks/useTheme';
+import { useTheme } from 'styled-components';
 
 //types
 import { TransactionTypeButtonProps } from './types';

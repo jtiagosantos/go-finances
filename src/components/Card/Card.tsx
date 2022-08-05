@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
+import { useTheme } from 'styled-components';
 
 //types
 import { CardProps } from './types';
 
 //styles
 import * as S from './styles';
-import { useTheme } from '../../hooks/useTheme';
 
 export const Card: FC<CardProps> = ({ 
   type,
