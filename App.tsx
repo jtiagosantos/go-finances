@@ -8,8 +8,8 @@ import {
 } from '@expo-google-fonts/poppins';
 import * as SplashScreen from 'expo-splash-screen';
 
-//screens
-import { Dashboard } from './src/screens/Dashboard/Dashboard';
+//routes
+import { AppRoutes } from './src/routes';
 
 //styles
 import { theme } from './src/styles/theme';
@@ -31,7 +31,7 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Dashboard />
+      <AppRoutes />
     </ThemeProvider>
   );
 };
