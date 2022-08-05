@@ -3,10 +3,10 @@ import {
   Modal, 
   TouchableWithoutFeedback, 
   Keyboard,
-  Alert,
 } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Toast from 'react-native-simple-toast';
 
 //components
 import { Header } from '../../components/Header/Header';
@@ -60,17 +60,11 @@ export const Register = () => {
 
   const handleRegister = (formData: FormData) => {
     if (!selectedTransactionType) {
-      return Alert.alert(
-        'Campo obrigatório', 
-        'Selecione o tipo da transação',
-      );
+      return Toast.show('Selecione o tipo da transação');
     }
 
     if (category.key === 'category') {
-      return Alert.alert(
-        'Campo obrigatório', 
-        'Selecione a categoria da transação',
-      );
+      return Toast.show('Selecione a categoria da transação');
     }
 
     const { name, amount } = formData;
