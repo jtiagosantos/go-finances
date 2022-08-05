@@ -8,15 +8,16 @@ import { Input } from '../Input/Input';
 import { ControlledInputProps } from './types';
 
 //styles
-import { Container } from './styles';
+import * as S from './styles';
 
 export const ControlledInput: FC<ControlledInputProps> = ({
   control,
   name,
+  error,
   ...rest
 }) => {
   return (
-    <Container>
+    <S.Container>
       <Controller
         control={control}
         name={name}
@@ -28,6 +29,12 @@ export const ControlledInput: FC<ControlledInputProps> = ({
           />
         )}
       />
-    </Container>
+      {!!error && (
+        <S.Error>
+          <S.Icon name="alert-circle" />
+          <S.TextError>{error}</S.TextError>
+        </S.Error>
+      )}
+    </S.Container>
   );
 }
