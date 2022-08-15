@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Modal, 
-  TouchableWithoutFeedback, 
-  Keyboard,
-} from 'react-native';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Toast from 'react-native-simple-toast';
@@ -15,8 +11,9 @@ import {
   TransactionTypeButton 
 } from '../../components/Form/TransactionTypeButton/TransactionTypeButton';
 import { SelectCategory } from '../../components/Form/SelectCategory/SelectCategory';
-import { CategorySelect } from '../CategorySelect/CategorySelect';
+import { CategoryList } from '../../components/CategoryList/CategoryList';
 import { ControlledInput } from '../../components/Form/ControlledInput/ControlledInput';
+import { Modal } from '../../components/Modal/Modal';
 
 //hooks
 import { useDisclosure } from '../../hooks/useDisclosure';
@@ -128,11 +125,14 @@ export const Register = () => {
           />
         </S.Form>
 
-        <Modal visible={isOpen} statusBarTranslucent>
-          <CategorySelect 
+        <Modal 
+          isVisible={isOpen} 
+          onBackdropPress={onToggle} 
+        >
+          <CategoryList 
             category={category}
             setCategory={setCategory}
-            onCloseCategorySelect={onToggle}
+            onCloseCategoryList={onToggle}
           />
         </Modal>
       </S.Container>

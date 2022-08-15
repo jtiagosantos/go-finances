@@ -5,13 +5,15 @@ interface Category {
   name: string;
 }
 
-export interface CategorySelectProps {
+export interface CategoryListProps {
   category: Category;
   setCategory: (category: Category) => void;
-  onCloseCategorySelect: () => void;
+  onCloseCategoryList: () => void;
 }
 
-export type CategoryListProps = typeof categories[0];
+export type ContainerProps = typeof categories[0];
+
+export type Item = ContainerProps;
 
 export interface CategoryProps {
   isSelected: boolean;

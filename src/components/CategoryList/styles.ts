@@ -3,21 +3,15 @@ import styled from 'styled-components/native';
 import { AnyStyledComponent } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 //types
-import { CategoryListProps, CategoryProps } from './types';
+import { ContainerProps, CategoryProps } from './types';
 
-export const Container = styled(GestureHandlerRootView)`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
-
-export const CategoryList = styled.FlatList`
+export const Container = styled.FlatList`
   width: 100%;
 
   flex: 1;
-` as unknown as typeof FlatList<CategoryListProps>;
+` as unknown as typeof FlatList<ContainerProps>;
 
 export const Category = styled.TouchableOpacity<CategoryProps>`
   width: 100%;
@@ -26,7 +20,7 @@ export const Category = styled.TouchableOpacity<CategoryProps>`
     isSelected ? 
     theme.colors.secondary.light 
     : 
-    theme.colors.background
+    theme.colors.shape
   };
 
   flex-direction: row;
@@ -47,9 +41,4 @@ export const Divider = styled.View`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.colors.text};
-`;
-
-export const Footer = styled.View`
-  width: 100%;
-  padding: 24px;
 `;
