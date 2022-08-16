@@ -81,7 +81,7 @@ export const Register = () => {
       name,
       amount,
       transactionType: selectedTransactionType,
-      category: category.name,
+      category: category.key,
       date: new Date(),
     }
 
