@@ -72,15 +72,19 @@ export const Dashboard = () => {
       </S.Cards>
 
       <S.Transactions>
-        <S.Title>Listagem</S.Title>
+        {!!transactions.length && (
+          <>
+            <S.Title>Listagem</S.Title>
 
-        <S.TransactionList 
-          data={transactions}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TransactionCard {...item} />
-          )}
-        />
+            <S.TransactionList 
+              data={transactions}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TransactionCard {...item} />
+              )}
+            />
+          </>
+        )}
 
       </S.Transactions>
     </S.Container>
