@@ -1,8 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 //components
 import { Card } from '../../components/Card/Card';
 import { TransactionCard } from '../../components/TransactionCard/TransactionCard';
+
+//hooks
+import { useStorage } from '../../hooks/useStorage';
+
+//utils
+import { formatTransactions } from '../../utils/formatTransactions';
+
+//constants
+import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
 
 //types
 import { DataListProps } from './types';
@@ -11,41 +20,19 @@ import { DataListProps } from './types';
 import * as S from './styles';
 
 export const Dashboard = () => {
-  const data: DataListProps[] = [
-    {
-      id: '1',
-      type: 'inflow',
-      title: 'Desenvolvimento de site',
-      amount: 'R$ 12.000,00',
-      category: {
-        name: 'Vendas',
-        icon: 'dollar-sign',
-      },
-      date: '13/04/2020',
-    },
-    {
-      id: '2',
-      type: 'outflow',
-      title: 'Hamburgueria Pizzy',
-      amount: 'R$ 59,00',
-      category: {
-        name: 'Alimentação',
-        icon: 'coffee',
-      },
-      date: '10/04/2020',
-    },
-    {
-      id: '3',
-      type: 'outflow',
-      title: 'Aluguel do apartamento',
-      amount: 'R$ 1.200,00',
-      category: {
-        name: 'Casa',
-        icon: 'home',
-      },
-      date: '13/04/2020',
+  const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
+
+  const [transactions, setTransactions] = useState<DataListProps[]>([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      const storagedTransactions = await getItem();
+      const formattedTransactions = formatTransactions(storagedTransactions);
+      setTransactions(formattedTransactions || []);
     }
-  ];
+
+    fetchTransactions();
+  }, []);
 
   return (
     <S.Container>
@@ -87,7 +74,7 @@ export const Dashboard = () => {
         <S.Title>Listagem</S.Title>
 
         <S.TransactionList 
-          data={data}
+          data={transactions}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TransactionCard {...item} />
