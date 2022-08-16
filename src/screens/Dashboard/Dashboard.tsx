@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 //components
 import { Card } from '../../components/Card/Card';
@@ -24,15 +25,15 @@ export const Dashboard = () => {
 
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      const storagedTransactions = await getItem();
-      const formattedTransactions = formatTransactions(storagedTransactions);
-      setTransactions(formattedTransactions || []);
-    }
-
+  const fetchTransactions = async () => {
+    const storagedTransactions = await getItem();
+    const formattedTransactions = formatTransactions(storagedTransactions);
+    setTransactions(formattedTransactions || []);
+  }
+  
+  useFocusEffect(useCallback(() => {
     fetchTransactions();
-  }, []);
+  }, []));
 
   return (
     <S.Container>
