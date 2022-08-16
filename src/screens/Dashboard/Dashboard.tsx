@@ -11,6 +11,8 @@ import { useStorage } from '../../hooks/useStorage';
 
 //utils
 import { formatTransactions } from '../../utils/formatTransactions';
+import { getLastTransactionDate } from '../../utils/getLastTransactionDate';
+import { formatTotalLastDate } from '../../utils/formatTotalLastDate';
 
 //constants
 import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
@@ -28,6 +30,20 @@ export const Dashboard = () => {
   const [cardsData, setCardsData] = useState({} as CardsData);
   const [isLoading, setIsLoading] = useState(true);
 
+  const getLastTransactions = () => {
+    const lastEntryTransactionDate = getLastTransactionDate(transactions, 'inflow');
+    const lastExpensiveTransactionDate = getLastTransactionDate(transactions, 'outflow');
+
+    setCardsData({
+      ...cardsData,
+      lastDate: {
+        entry: `Última entrada em ${lastEntryTransactionDate}`,
+        expensive: `Última saída em ${lastExpensiveTransactionDate}`,
+        total: formatTotalLastDate(lastExpensiveTransactionDate)
+      }
+    });
+  }
+
   const fetchTransactions = async () => {
     setIsLoading(true);
 
@@ -41,6 +57,7 @@ export const Dashboard = () => {
 
     setTransactions(formattedTransactions || []);
     setCardsData({
+      ...cardsData,
       expensiveTotal,
       entriesTotal,
       allTotal,
@@ -51,6 +68,10 @@ export const Dashboard = () => {
   useFocusEffect(useCallback(() => {
     fetchTransactions();
   }, []));
+
+  useFocusEffect(useCallback(() => {
+    getLastTransactions();
+  }, [transactions]));
 
   return (
     <>
@@ -78,19 +99,19 @@ export const Dashboard = () => {
               type='inflow'
               title='Entradas' 
               amount={cardsData?.entriesTotal} 
-              lastTransaction='Última entrada dia 13 de abril'  
+              lastTransaction={cardsData?.lastDate?.entry}
             />
             <Card 
               type='outflow'
               title='Saídas' 
               amount={cardsData?.expensiveTotal} 
-              lastTransaction='Última saída dia 03 de abril' 
+              lastTransaction={cardsData?.lastDate?.expensive} 
             />
             <Card 
               type='total'
               title='Total' 
               amount={cardsData?.allTotal} 
-              lastTransaction='01 à 16 de abril' 
+              lastTransaction={cardsData?.lastDate?.total} 
             />
           </S.Cards>
 

@@ -11,4 +11,9 @@ export interface CardsData {
   expensiveTotal: string;
   entriesTotal: string;
   allTotal: string;
+  lastDate: {
+    entry: string;
+    expensive: string;
+    total: string;
+  }
 }
