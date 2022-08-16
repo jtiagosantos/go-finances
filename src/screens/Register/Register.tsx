@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 
 //components
@@ -17,9 +18,16 @@ import { Modal } from '../../components/Modal/Modal';
 
 //hooks
 import { useDisclosure } from '../../hooks/useDisclosure';
+import { useStorage } from '../../hooks/useStorage';
+
+//utils
+import { generateId } from '../../utils/generateId';
 
 //schemas
 import { schema } from './schema';
+
+//constants
+import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
 
 //types
 import { TransactionType, FormData } from './types';
@@ -29,8 +37,10 @@ import * as S from './styles';
 
 export const Register = () => {
   const { isOpen, onToggle } = useDisclosure();
+  const { setItem, getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
+  const navigation = useNavigation();
 
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       name: '',
       amount: '',
@@ -55,7 +65,7 @@ export const Register = () => {
     return selectedTransactionType === type;
   }
 
-  const handleRegister = (formData: FormData) => {
+  const handleRegister = async (formData: FormData) => {
     if (!selectedTransactionType) {
       return Toast.show('Selecione o tipo da transação');
     }
@@ -66,14 +76,29 @@ export const Register = () => {
 
     const { name, amount } = formData;
 
-    const data = {
+    const newTransaction = {
+      id: generateId(),
       name,
       amount,
       transactionType: selectedTransactionType,
       category: category.name,
+      date: new Date(),
     }
 
-    console.log(data)
+    const transactions = await getItem();
+    await setItem([
+      newTransaction,
+      ...transactions || [],
+    ]);
+
+    reset();
+    setSelectedTransactionType('');
+    setCategory({
+      key: 'category',
+      name: 'Categoria',
+    });
+
+    navigation.navigate('Listagem');
   }
 
   return (
