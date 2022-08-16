@@ -15,7 +15,7 @@ import { formatTransactions } from '../../utils/formatTransactions';
 import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
 
 //types
-import { DataListProps } from './types';
+import { DataListProps, CardsData } from './types';
 
 //styles
 import * as S from './styles';
@@ -24,11 +24,23 @@ export const Dashboard = () => {
   const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
 
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
+  const [cardsData, setCardsData] = useState({} as CardsData);
 
   const fetchTransactions = async () => {
     const storagedTransactions = await getItem();
-    const formattedTransactions = formatTransactions(storagedTransactions);
+    const {
+      formattedTransactions,
+      expensiveTotal,
+      entriesTotal,
+      allTotal,
+    } = formatTransactions(storagedTransactions);
+
     setTransactions(formattedTransactions || []);
+    setCardsData({
+      expensiveTotal,
+      entriesTotal,
+      allTotal,
+    });
   }
   
   useFocusEffect(useCallback(() => {
@@ -54,19 +66,19 @@ export const Dashboard = () => {
         <Card 
           type='inflow'
           title='Entradas' 
-          amount='R$ 17.400,00' 
+          amount={cardsData?.entriesTotal} 
           lastTransaction='Última entrada dia 13 de abril'  
         />
         <Card 
           type='outflow'
           title='Saídas' 
-          amount='R$ 1.259,00' 
+          amount={cardsData?.expensiveTotal} 
           lastTransaction='Última saída dia 03 de abril' 
         />
         <Card 
           type='total'
           title='Total' 
-          amount='R$ 16.141,00' 
+          amount={cardsData?.allTotal} 
           lastTransaction='01 à 16 de abril' 
         />
       </S.Cards>

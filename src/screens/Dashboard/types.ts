@@ -6,3 +6,9 @@ import {
 export interface DataListProps extends TransactionCardProps {
   id: string;
 }
+
+export interface CardsData {
+  expensiveTotal: string;
+  entriesTotal: string;
+  allTotal: string;
+}
