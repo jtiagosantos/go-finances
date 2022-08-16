@@ -94,3 +94,9 @@ export const TransactionList = styled.FlatList.attrs({
     paddingBottom: getBottomSpace() || 16,
   }
 })`` as unknown as typeof FlatList<DataListProps>;
+
+export const LoadingContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
