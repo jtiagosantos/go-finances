@@ -38,7 +38,7 @@ import * as S from './styles';
 export const Register = () => {
   const { isOpen, onToggle } = useDisclosure();
   const { setItem, getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     defaultValues: {
@@ -98,7 +98,7 @@ export const Register = () => {
       name: 'Categoria',
     });
 
-    navigation.navigate('Listagem');
+    navigate('Listagem');
   }
 
   return (
