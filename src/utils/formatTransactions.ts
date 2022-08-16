@@ -1,19 +1,6 @@
 import { DataListProps as Transaction } from '../screens/Dashboard/types';
-
-const formatAmount = (amount: string | number) => {
-  return Number(amount).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  });
-}
-
-const formatDate = (date: string) => {
-  return Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-  }).format(new Date(date));
-}
+import { formatDate } from './formatDate';
+import { formatAmount } from './formatAmount';
 
 export const formatTransactions = (transactions: Transaction[]) => {
   let entriesTotal = 0;
