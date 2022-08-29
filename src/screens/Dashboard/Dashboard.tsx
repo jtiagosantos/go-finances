@@ -69,10 +69,10 @@ export const Dashboard = () => {
     fetchTransactions();
   }, []));
 
-  useFocusEffect(useCallback(() => {
+  /* useFocusEffect(useCallback(() => {
     getLastTransactions();
   }, [transactions]));
-
+ */
   return (
     <>
       {isLoading ? (
