@@ -9,7 +9,7 @@ export const Container = styled.View<ContainerProps>`
   background-color: ${({ theme }) => theme.colors.shape};
   padding: 13px 24px;
   border-radius: 5px;
-  border-left-width: 4px;
+  border-left-width: 5px;
   border-left-color: ${({ flagColor }) => flagColor};
   margin-bottom: 8px;
 
