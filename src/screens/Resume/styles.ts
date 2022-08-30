@@ -1,6 +1,9 @@
 import styled from 'styled-components/native';
+import { Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
+
+const { height } = Dimensions.get('screen');
 
 export const Container = styled.View`
   flex: 1;
@@ -36,4 +39,10 @@ export const MonthSelectorIcon = styled(Feather)`
 export const Month = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(20)}px;
+`;
+
+export const LoadingContainer = styled.View`
+  height: ${height / 2}px;
+  align-items: center;
+  justify-content: center;
 `;

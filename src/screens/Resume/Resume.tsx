@@ -8,6 +8,7 @@ import { ptBR } from 'date-fns/locale';
 //components
 import { Header } from '../../components/Header/Header';
 import { HistoricListItem } from '../../components/HistoricListItem/HistoricListItem';
+import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
 
 //hooks
 import { useStorage } from '../../hooks/useStorage';
@@ -30,6 +31,7 @@ export const Resume = () => {
   const { colors } = useTheme();
   const [totalCategoryData, setTotalCategoryData] = useState<TotalByCategoryData[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeDate = (action: 'next' | 'previous') => {
     if (action === 'next') {
@@ -40,6 +42,8 @@ export const Resume = () => {
   }
 
   const loadResumeData = async () => {
+    setIsLoading(true);
+
     const transactions = await getItem();
     
     const expensivesTransactions = transactions.filter(
@@ -83,6 +87,7 @@ export const Resume = () => {
     });
 
     setTotalCategoryData(totalByCategory);
+    setIsLoading(false);
   }
 
   useFocusEffect(useCallback(() => {
@@ -108,36 +113,46 @@ export const Resume = () => {
           </S.MonthSelectorButton>
         </S.MonthSelector>
 
-        <S.ChartContainer>
-          <VictoryPie
-            data={totalCategoryData}
-            x="percent"
-            y="total"
-            height={370}
-            colorScale={totalCategoryData.map((i) => i.color)}
-            style={{
-              labels: {
-                fontSize: RFValue(15),
-                fontWeight: 'bold',
-                fill: colors.title,
-              }
-            }}
-            labelRadius={140}
-            animate={{
-              easing: 'expOut',
-              duration: 2000,
-            }}
-          />
-        </S.ChartContainer>
+        {isLoading && (
+          <S.LoadingContainer>
+            <SpinnerLoading />
+          </S.LoadingContainer>
+        )}
 
-        {totalCategoryData.map((category) => (
-          <HistoricListItem 
-            key={category.color}
-            title={category.name}
-            amount={category.formattedTotal}
-            color={category.color}
-          />
-        ))}
+        {!isLoading && (
+          <>
+            <S.ChartContainer>
+              <VictoryPie
+                data={totalCategoryData}
+                x="percent"
+                y="total"
+                height={370}
+                colorScale={totalCategoryData.map((i) => i.color)}
+                style={{
+                  labels: {
+                    fontSize: RFValue(15),
+                    fontWeight: 'bold',
+                    fill: colors.title,
+                  }
+                }}
+                labelRadius={140}
+                animate={{
+                  easing: 'expOut',
+                  duration: 2000,
+                }}
+              />
+            </S.ChartContainer>
+
+            {totalCategoryData.map((category) => (
+              <HistoricListItem 
+                key={category.color}
+                title={category.name}
+                amount={category.formattedTotal}
+                color={category.color}
+              />
+            ))}
+          </>
+        )}
       </S.Content>
     </S.Container>
   );
