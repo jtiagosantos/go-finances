@@ -13,6 +13,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 //routes
 import { AppRoutes } from './src/routes';
+import { SignIn } from './src/screens/SignIn/SignIn';
 
 //styles
 import { theme } from './src/styles/theme';
@@ -35,7 +36,8 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StatusBar barStyle="light-content" backgroundColor={theme.colors.primary} />
-      <AppRoutes />
+      {/* <AppRoutes /> */}
+      <SignIn />
     </ThemeProvider>
   );
 };
