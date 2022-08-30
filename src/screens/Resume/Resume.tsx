@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { VictoryPie } from 'victory-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { addMonths, subMonths, format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 //components
 import { Header } from '../../components/Header/Header';
@@ -28,12 +29,24 @@ export const Resume = () => {
   const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const { colors } = useTheme();
   const [totalCategoryData, setTotalCategoryData] = useState<TotalByCategoryData[]>([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleChangeDate = (action: 'next' | 'previous') => {
+    if (action === 'next') {
+      setSelectedDate(addMonths(selectedDate, 1));
+    } else {
+      setSelectedDate(subMonths(selectedDate, 1));
+    }
+  }
 
   const loadResumeData = async () => {
     const transactions = await getItem();
     
     const expensivesTransactions = transactions.filter(
-      (transaction: Transaction) => transaction.transactionType === 'outflow'
+      (transaction: Transaction) => 
+        transaction.transactionType === 'outflow' && 
+        new Date(transaction.date).getMonth() === selectedDate.getMonth() &&
+        new Date(transaction.date).getFullYear() === selectedDate.getFullYear()
     );
     const expensivesTransactionsTotal = expensivesTransactions.reduce(
       (acumullator: number, expensive: Transaction) => {
@@ -74,13 +87,27 @@ export const Resume = () => {
 
   useFocusEffect(useCallback(() => {
     loadResumeData();
-  }, []));
+  }, [selectedDate]));
 
   return (
     <S.Container>
       <Header title="Resumo por categoria" />
 
       <S.Content>
+        <S.MonthSelector>
+          <S.MonthSelectorButton onPress={() => handleChangeDate('previous')}>
+            <S.MonthSelectorIcon name="chevron-left" />
+          </S.MonthSelectorButton>
+
+          <S.Month>
+            {format(selectedDate, 'MMMM, yyyy', { locale: ptBR })}
+          </S.Month>
+
+          <S.MonthSelectorButton onPress={() => handleChangeDate('next')}>
+            <S.MonthSelectorIcon name="chevron-right" />
+          </S.MonthSelectorButton>
+        </S.MonthSelector>
+
         <S.ChartContainer>
           <VictoryPie
             data={totalCategoryData}
