@@ -44,15 +44,14 @@ export const Resume = () => {
   const loadResumeData = async () => {
     setIsLoading(true);
 
-    const transactions = await getItem();
+    const storagedTransactions = await getItem();
     
-    const expensivesTransactions = transactions.filter(
+    const transactions = storagedTransactions.filter(
       (transaction: Transaction) => 
-        transaction.transactionType === 'outflow' && 
         new Date(transaction.date).getMonth() === selectedDate.getMonth() &&
         new Date(transaction.date).getFullYear() === selectedDate.getFullYear()
     );
-    const expensivesTransactionsTotal = expensivesTransactions.reduce(
+    const transactionsTotal = transactions.reduce(
       (acumullator: number, expensive: Transaction) => {
         return acumullator + Number(expensive.amount)
       }, 0);
@@ -61,7 +60,7 @@ export const Resume = () => {
     categories.forEach((category) => {
       let categorySum = 0;
 
-      expensivesTransactions.forEach((transaction: Transaction) => {
+      transactions.forEach((transaction: Transaction) => {
         if (transaction.category === category.key) {
           categorySum += Number(transaction.amount);
         }
@@ -74,7 +73,7 @@ export const Resume = () => {
             currency: 'BRL'
           }
         );
-        const percent = `${((categorySum / expensivesTransactionsTotal) * 100).toFixed(0)}%`;
+        const percent = `${((categorySum / transactionsTotal) * 100).toFixed(0)}%`;
 
         totalByCategory.push({
           name: category.name,
