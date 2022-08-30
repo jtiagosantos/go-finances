@@ -7,6 +7,8 @@ export interface Transaction {
 
 export interface TotalByCategoryData {
   name: string;
-  total: string;
+  total: number;
+  formattedTotal: string;
+  percent: string;
   color: string;
 }
