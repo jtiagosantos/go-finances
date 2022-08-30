@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 import { ThemeProvider } from 'styled-components';
@@ -33,6 +34,7 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.colors.primary} />
       <AppRoutes />
     </ThemeProvider>
   );
