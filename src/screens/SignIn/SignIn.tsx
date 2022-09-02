@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 //components
@@ -17,11 +17,22 @@ import LogoImage from '../../assets/logo.svg';
 import * as S from './styles';
 
 export const SignIn = () => {
-  const { signInWithGoogle } = useAuthDispatch();
+  const deviceIsIOS = Platform.OS === 'ios';
+
+  const { signInWithGoogle, signInWithApple } = useAuthDispatch();
 
   const handleSignInWithGoogle = async () => {
     try {
       await signInWithGoogle();
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Não foi possível entrar com Google');
+    }
+  }
+
+  const handleSignInWithApple = async () => {
+    try {
+      await signInWithApple();
     } catch (error) {
       console.log(error);
       Alert.alert('Não foi possível entrar com Google');
@@ -51,7 +62,13 @@ export const SignIn = () => {
             icon={GoogleIcon} 
             onPress={handleSignInWithGoogle}
           />
-          <SignInButton text='Entrar com Apple' icon={AppleIcon} />
+          {deviceIsIOS && (
+            <SignInButton 
+              text='Entrar com Apple' 
+              icon={AppleIcon} 
+              onPress={handleSignInWithApple}
+            />
+          )}
         </S.SignInButtons>
       </S.Footer>
     </S.Container>
