@@ -1,8 +1,12 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 //components
 import { SignInButton } from '../../components/SignInButton/SignInButton';
+
+//hooks
+import { useAuthDispatch } from '../../hooks/auth/useAuthDispatch';
 
 //assets
 import GoogleIcon from '../../assets/google.svg';
@@ -13,6 +17,17 @@ import LogoImage from '../../assets/logo.svg';
 import * as S from './styles';
 
 export const SignIn = () => {
+  const { signInWithGoogle } = useAuthDispatch();
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Não foi possível entrar com Google');
+    }
+  }
+
   return (
     <S.Container>
       <S.Header>
@@ -31,7 +46,11 @@ export const SignIn = () => {
 
       <S.Footer>
         <S.SignInButtons>
-          <SignInButton text='Entrar com Google' icon={GoogleIcon} />
+          <SignInButton 
+            text='Entrar com Google' 
+            icon={GoogleIcon} 
+            onPress={handleSignInWithGoogle}
+          />
           <SignInButton text='Entrar com Apple' icon={AppleIcon} />
         </S.SignInButtons>
       </S.Footer>
