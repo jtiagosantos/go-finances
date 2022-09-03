@@ -17,9 +17,6 @@ import { formatTransactions } from '../../utils/formatTransactions';
 import { getLastTransactionDate } from '../../utils/getLastTransactionDate';
 import { formatTotalLastDate } from '../../utils/formatTotalLastDate';
 
-//constants
-import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
-
 //types
 import { DataListProps, CardsData } from './types';
 
@@ -27,9 +24,12 @@ import { DataListProps, CardsData } from './types';
 import * as S from './styles';
 
 export const Dashboard = () => {
+  const { user } = useAuthState();
+
+  const STORAGE_TRANSACTIONS_KEY = `@gofinances:transactions-user:${user?.id}`;
+
   const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const { signOut } = useAuthDispatch();
-  const { user } = useAuthState();
 
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [cardsData, setCardsData] = useState({} as CardsData);

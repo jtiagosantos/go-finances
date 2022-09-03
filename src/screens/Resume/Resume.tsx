@@ -13,12 +13,10 @@ import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
 //hooks
 import { useStorage } from '../../hooks/useStorage';
 import { useTheme } from 'styled-components';
+import { useAuthState } from '../../hooks/auth/useAuthState';
 
 //utils
 import { categories } from '../../utils/categories';
-
-//constants
-import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
 
 //types
 import {Transaction, TotalByCategoryData} from './types';
@@ -27,8 +25,12 @@ import {Transaction, TotalByCategoryData} from './types';
 import * as S from './styles';
 
 export const Resume = () => {
-  const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const { colors } = useTheme();
+  const { user } = useAuthState();
+
+  const STORAGE_TRANSACTIONS_KEY = `@gofinances:transactions-user:${user?.id}`;
+
+  const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const [totalCategoryData, setTotalCategoryData] = useState<TotalByCategoryData[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);

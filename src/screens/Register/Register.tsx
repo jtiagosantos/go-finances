@@ -19,15 +19,13 @@ import { Modal } from '../../components/Modal/Modal';
 //hooks
 import { useDisclosure } from '../../hooks/useDisclosure';
 import { useStorage } from '../../hooks/useStorage';
+import { useAuthState } from '../../hooks/auth/useAuthState';
 
 //utils
 import { generateId } from '../../utils/generateId';
 
 //schemas
 import { schema } from './schema';
-
-//constants
-import { STORAGE_TRANSACTIONS_KEY } from '../../constants/storage';
 
 //types
 import { TransactionType, FormData } from './types';
@@ -36,6 +34,10 @@ import { TransactionType, FormData } from './types';
 import * as S from './styles';
 
 export const Register = () => {
+  const { user } = useAuthState();
+  
+  const STORAGE_TRANSACTIONS_KEY = `@gofinances:transactions-user:${user?.id}`;
+
   const { isOpen, onToggle } = useDisclosure();
   const { setItem, getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const { navigate } = useNavigation();
