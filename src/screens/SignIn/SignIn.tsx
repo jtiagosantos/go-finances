@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Alert, Platform } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 //components
 import { SignInButton } from '../../components/SignInButton/SignInButton';
+import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
 
 //hooks
 import { useAuthDispatch } from '../../hooks/auth/useAuthDispatch';
@@ -20,22 +21,29 @@ export const SignIn = () => {
   const deviceIsIOS = Platform.OS === 'ios';
 
   const { signInWithGoogle, signInWithApple } = useAuthDispatch();
+  const [isSigning, setIsSignin] = useState(false);
 
   const handleSignInWithGoogle = async () => {
     try {
-      await signInWithGoogle();
+      setIsSignin(true);
+      return await signInWithGoogle();
     } catch (error) {
       console.log(error);
       Alert.alert('Não foi possível entrar com Google');
+    } finally {
+      setIsSignin(false);
     }
   }
 
   const handleSignInWithApple = async () => {
     try {
-      await signInWithApple();
+      setIsSignin(true);
+      return await signInWithApple();
     } catch (error) {
       console.log(error);
       Alert.alert('Não foi possível entrar com Google');
+    } finally {
+      setIsSignin(false);
     }
   }
 
@@ -70,6 +78,8 @@ export const SignIn = () => {
             />
           )}
         </S.SignInButtons>
+
+        {isSigning && <SpinnerLoading style={{ marginTop: 24 }} />}
       </S.Footer>
     </S.Container>
   );
