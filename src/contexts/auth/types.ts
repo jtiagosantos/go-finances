@@ -13,7 +13,7 @@ export interface AuthorizationResponse {
 }
 
 export interface AuthStateContextData {
-  user: User;
+  user?: User;
 }
 
 export interface AuthDispatchContextData {

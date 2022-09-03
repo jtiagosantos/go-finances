@@ -40,8 +40,7 @@ export const App = () => {
     <AuthProvider>
       <ThemeProvider theme={theme}>
         <StatusBar barStyle="light-content" backgroundColor={theme.colors.primary} />
-        {/* <AppRoutes /> */}
-        <SignIn />
+        <AppRoutes />
       </ThemeProvider>
     </AuthProvider>
   );

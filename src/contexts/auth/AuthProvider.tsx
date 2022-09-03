@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, useMemo, PropsWithChildren } from 'react';
+import { FC, useState, useCallback, useMemo, PropsWithChildren, useEffect } from 'react';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
@@ -8,14 +8,19 @@ import { User, AuthorizationResponse } from './types';
 //contexts
 import { AuthStateContext, AuthDispatchContext } from './authContexts';
 
+//hooks
+import { useStorage } from '../../hooks/useStorage';
+
 //constants
 import { AUTH_URL } from '../../constants/googleCrendentials';
+import { STORAGE_USER_KEY } from '../../constants/storage';
 
 export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const AuthStateProvider = AuthStateContext.Provider;
   const AuthDispatchProvider = AuthDispatchContext.Provider;
 
-  const [user, setUser] = useState({} as User);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const { getItem, setItem } = useStorage(STORAGE_USER_KEY);
 
   const handleSignInWithGoogle = useCallback(async () => {
     const { params, type } = await AuthSession.startAsync({ authUrl: AUTH_URL }) as AuthorizationResponse;
@@ -62,6 +67,17 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   }), [
     user,
   ]);
+
+  useEffect(() => {
+    user && (async () => await setItem(user))();
+  }, [user]);
+
+  useEffect(() => {
+    (async () => {
+      const storedUser = await getItem();
+      storedUser && setUser(storedUser);
+    })();
+  }, []);
 
   return (
     <AuthDispatchProvider value={authDispatch}>
