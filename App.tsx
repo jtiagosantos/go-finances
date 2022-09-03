@@ -12,7 +12,6 @@ import * as SplashScreen from 'expo-splash-screen';
 
 //routes
 import { AppRoutes } from './src/routes';
-import { SignIn } from './src/screens/SignIn/SignIn';
 
 //providers
 import { ThemeProvider } from 'styled-components';

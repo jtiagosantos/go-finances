@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 //components
@@ -8,6 +9,7 @@ import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
 
 //hooks
 import { useStorage } from '../../hooks/useStorage';
+import { useAuthDispatch } from '../../hooks/auth/useAuthDispatch';
 
 //utils
 import { formatTransactions } from '../../utils/formatTransactions';
@@ -25,6 +27,7 @@ import * as S from './styles';
 
 export const Dashboard = () => {
   const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
+  const { signOut } = useAuthDispatch();
 
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [cardsData, setCardsData] = useState({} as CardsData);
@@ -90,7 +93,9 @@ export const Dashboard = () => {
                   <S.UserName>Tiago</S.UserName>
                 </S.User>
               </S.UserInfo>
-              <S.Icon name="power" />
+              <TouchableOpacity onPress={signOut}>
+                <S.Icon name="power" />
+              </TouchableOpacity>
             </S.UserWrapper>
           </S.Header>
 

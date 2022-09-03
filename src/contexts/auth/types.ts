@@ -19,4 +19,5 @@ export interface AuthStateContextData {
 export interface AuthDispatchContextData {
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
+  signOut: () => Promise<void>;
 }

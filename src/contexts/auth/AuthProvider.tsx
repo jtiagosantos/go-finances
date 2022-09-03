@@ -20,7 +20,7 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const AuthDispatchProvider = AuthDispatchContext.Provider;
 
   const [user, setUser] = useState<User | undefined>(undefined);
-  const { getItem, setItem } = useStorage(STORAGE_USER_KEY);
+  const { getItem, setItem, removeItem } = useStorage(STORAGE_USER_KEY);
 
   const handleSignInWithGoogle = useCallback(async () => {
     const { params, type } = await AuthSession.startAsync({ authUrl: AUTH_URL }) as AuthorizationResponse;
@@ -55,11 +55,19 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
     }
   }, []);
 
+  const handleSignOut = async () => {
+    setUser(undefined);
+    await removeItem();
+  }
+
   const authDispatch = useMemo(() => ({
     signInWithGoogle: handleSignInWithGoogle,
     signInWithApple: handleSignInWithApple,
+    signOut: handleSignOut,
   }), [
     handleSignInWithGoogle,
+    handleSignInWithApple,
+    handleSignOut,
   ]);
 
   const authState = useMemo(() => ({
