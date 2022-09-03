@@ -30,7 +30,7 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
       const userData = await response.json();
       setUser({
         id: userData.id,
-        name: userData.given_name,
+        name: userData.name,
         email: userData.email,
         photo: userData?.picture,
       });
