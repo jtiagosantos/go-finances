@@ -10,6 +10,7 @@ import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
 //hooks
 import { useStorage } from '../../hooks/useStorage';
 import { useAuthDispatch } from '../../hooks/auth/useAuthDispatch';
+import { useAuthState } from '../../hooks/auth/useAuthState';
 
 //utils
 import { formatTransactions } from '../../utils/formatTransactions';
@@ -28,6 +29,7 @@ import * as S from './styles';
 export const Dashboard = () => {
   const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const { signOut } = useAuthDispatch();
+  const { user } = useAuthState();
 
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [cardsData, setCardsData] = useState({} as CardsData);
@@ -87,10 +89,10 @@ export const Dashboard = () => {
           <S.Header>
             <S.UserWrapper>
               <S.UserInfo>
-                <S.Photo source={{ uri: 'https://github.com/jtiagosantos.png' }} />
+                <S.Photo source={{ uri: user?.photo }} />
                 <S.User>
                   <S.Greeting>Olá, </S.Greeting>
-                  <S.UserName>Tiago</S.UserName>
+                  <S.UserName>{user?.name}</S.UserName>
                 </S.User>
               </S.UserInfo>
               <TouchableOpacity onPress={signOut}>
