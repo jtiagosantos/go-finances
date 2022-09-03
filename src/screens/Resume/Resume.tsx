@@ -45,48 +45,52 @@ export const Resume = () => {
     setIsLoading(true);
 
     const storagedTransactions = await getItem();
-    
-    const transactions = storagedTransactions.filter(
-      (transaction: Transaction) => 
-        new Date(transaction.date).getMonth() === selectedDate.getMonth() &&
-        new Date(transaction.date).getFullYear() === selectedDate.getFullYear()
-    );
-    const transactionsTotal = transactions.reduce(
-      (acumullator: number, expensive: Transaction) => {
-        return acumullator + Number(expensive.amount)
-      }, 0);
-    const totalByCategory: TotalByCategoryData[] = [];
 
-    categories.forEach((category) => {
-      let categorySum = 0;
-
-      transactions.forEach((transaction: Transaction) => {
-        if (transaction.category === category.key) {
-          categorySum += Number(transaction.amount);
+    if (storagedTransactions) {
+      const transactions = storagedTransactions.filter(
+        (transaction: Transaction) => 
+          new Date(transaction.date).getMonth() === selectedDate.getMonth() &&
+          new Date(transaction.date).getFullYear() === selectedDate.getFullYear()
+      );
+      const transactionsTotal = transactions.reduce(
+        (acumullator: number, expensive: Transaction) => {
+          return acumullator + Number(expensive.amount)
+        }, 0);
+      const totalByCategory: TotalByCategoryData[] = [];
+  
+      categories.forEach((category) => {
+        let categorySum = 0;
+  
+        transactions.forEach((transaction: Transaction) => {
+          if (transaction.category === category.key) {
+            categorySum += Number(transaction.amount);
+          }
+        });
+  
+        if (!!categorySum) {
+          const total = categorySum.toLocaleString(
+            'pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            }
+          );
+          const percent = `${((categorySum / transactionsTotal) * 100).toFixed(0)}%`;
+  
+          totalByCategory.push({
+            name: category.name,
+            total: categorySum,
+            formattedTotal: total,
+            color: category.color,
+            percent,
+          });
         }
       });
-
-      if (!!categorySum) {
-        const total = categorySum.toLocaleString(
-          'pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-          }
-        );
-        const percent = `${((categorySum / transactionsTotal) * 100).toFixed(0)}%`;
-
-        totalByCategory.push({
-          name: category.name,
-          total: categorySum,
-          formattedTotal: total,
-          color: category.color,
-          percent,
-        });
-      }
-    });
-
-    setTotalCategoryData(totalByCategory);
-    setIsLoading(false);
+      
+      setTotalCategoryData(totalByCategory);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
   }
 
   useFocusEffect(useCallback(() => {
