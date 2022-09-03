@@ -44,13 +44,14 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
-
+  
     if (credentials) {
+      const fullName = `${credentials.fullName?.givenName}+${credentials.fullName?.middleName}`;
       setUser({
         id: credentials.user,
         name: credentials.fullName?.givenName ?? '',
         email: credentials.email ?? '',
-        photo: undefined,
+        photo: `https://ui-avatars.com/api/?name=${fullName}&background=fff`,
       });
     }
   }, []);
