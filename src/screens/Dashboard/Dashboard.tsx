@@ -53,7 +53,7 @@ export const Dashboard = () => {
       expensiveTotal,
       entriesTotal,
       allTotal,
-    } = formatTransactions(storagedTransactions);
+    } = formatTransactions(storagedTransactions || []);
 
     setTransactions(formattedTransactions || []);
     setCardsData({
