@@ -30,7 +30,6 @@ export const SignIn = () => {
     } catch (error) {
       console.log(error);
       Alert.alert('Não foi possível entrar com Google');
-    } finally {
       setIsSignin(false);
     }
   }
@@ -42,9 +41,8 @@ export const SignIn = () => {
     } catch (error) {
       console.log(error);
       Alert.alert('Não foi possível entrar com Google');
-    } finally {
       setIsSignin(false);
-    }
+    } 
   }
 
   return (
