@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 //components
 import { Card } from '../../components/Card/Card';
 import { TransactionCard } from '../../components/TransactionCard/TransactionCard';
 import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
+import { Title } from '../../components/Typography/Title';
+import { Legend } from '../../components/Typography/Legend';
 
 //hooks
 import { useStorage } from '../../hooks/useStorage';
@@ -123,7 +125,7 @@ export const Dashboard = () => {
           </S.Cards>
 
           <S.Transactions>
-            {!!transactions.length && (
+            {!!transactions.length ? (
               <>
                 <S.Title>Listagem</S.Title>
 
@@ -135,8 +137,12 @@ export const Dashboard = () => {
                   )}
                 />
               </>
+            ) : (
+              <View style={{marginTop: 100}}>
+                <Title>Sem registros</Title>
+                <Legend>Cadastre transações para vê-las aqui</Legend>
+              </View>
             )}
-
           </S.Transactions>
         </S.Container>
       )}

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { VictoryPie } from 'victory-native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -9,6 +10,8 @@ import { ptBR } from 'date-fns/locale';
 import { Header } from '../../components/Header/Header';
 import { HistoricListItem } from '../../components/HistoricListItem/HistoricListItem';
 import { SpinnerLoading } from '../../components/SpinnerLoading/SpinnerLoading';
+import { Title } from '../../components/Typography/Title';
+import { Legend } from '../../components/Typography/Legend';
 
 //hooks
 import { useStorage } from '../../hooks/useStorage';
@@ -126,7 +129,9 @@ export const Resume = () => {
 
         {!isLoading && (
           <>
-            <S.ChartContainer>
+          {!!totalCategoryData.length ? (
+            <>
+              <S.ChartContainer>
               <VictoryPie
                 data={totalCategoryData}
                 x="percent"
@@ -146,16 +151,23 @@ export const Resume = () => {
                   duration: 2000,
                 }}
               />
-            </S.ChartContainer>
+              </S.ChartContainer>
 
-            {totalCategoryData.map((category) => (
-              <HistoricListItem 
-                key={category.color}
-                title={category.name}
-                amount={category.formattedTotal}
-                color={category.color}
-              />
-            ))}
+              {totalCategoryData.map((category) => (
+                <HistoricListItem 
+                  key={category.color}
+                  title={category.name}
+                  amount={category.formattedTotal}
+                  color={category.color}
+                />
+              ))}
+            </>
+          ) : (
+            <View style={{marginTop: 150}}>
+              <Title>Sem registros</Title>
+              <Legend>Cadastre transações para vê-las aqui</Legend>
+            </View>
+          )}
           </>
         )}
       </S.Content>
