@@ -20,6 +20,7 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const AuthDispatchProvider = AuthDispatchContext.Provider;
 
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [loadingData, setLoadingData] = useState(true);
   const { getItem, setItem, removeItem } = useStorage(STORAGE_USER_KEY);
 
   const handleSignInWithGoogle = useCallback(async () => {
@@ -73,8 +74,10 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
 
   const authState = useMemo(() => ({
     user,
+    loadingData,
   }), [
     user,
+    loadingData,
   ]);
 
   useEffect(() => {
@@ -83,8 +86,10 @@ export const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
 
   useEffect(() => {
     (async () => {
+      setLoadingData(true);
       const storedUser = await getItem();
       storedUser && setUser(storedUser);
+      setLoadingData(false);
     })();
   }, []);
 

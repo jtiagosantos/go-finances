@@ -14,6 +14,7 @@ export interface AuthorizationResponse {
 
 export interface AuthStateContextData {
   user?: User;
+  loadingData: boolean;
 }
 
 export interface AuthDispatchContextData {
