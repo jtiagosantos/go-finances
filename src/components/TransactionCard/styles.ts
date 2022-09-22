@@ -6,7 +6,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 //types
 import { AmountProps } from './types';
 
-export const Container = styled.View`
+export const Card = styled.Pressable`
+  flex: 1;
   background-color: ${({ theme }) => theme.colors.shape};
   border-radius: 5px;
   padding: 17px 24px;
