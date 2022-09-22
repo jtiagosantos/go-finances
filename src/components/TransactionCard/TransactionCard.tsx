@@ -32,14 +32,10 @@ export const TransactionCard: FC<TransactionCardProps> = ({
 
   const cardAnimationState = useAnimationState({
     centralized: {
-      transform: [
-        { translateX: 0 },
-      ],
+      translateX: 0,
     },
     left: {
-      transform: [
-        { translateX: -80 },
-      ],
+      translateX: -80,
     },
   });
   const iconAnimationState = useAnimationState({
