@@ -30,7 +30,7 @@ export const Dashboard = () => {
 
   const STORAGE_TRANSACTIONS_KEY = `@gofinances:transactions-user:${user?.id}`;
 
-  const { getItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
+  const { getItem, setItem } = useStorage(STORAGE_TRANSACTIONS_KEY);
   const { signOut } = useAuthDispatch();
 
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
@@ -70,6 +70,15 @@ export const Dashboard = () => {
       allTotal,
     });
     setIsLoading(false);
+  }
+
+  const handleDeleteTransaction = async (transactionId: string) => {
+    const transactions = await getItem();
+    const filteredTransactions = transactions.filter(
+      (transaction: DataListProps) => transaction.id !== transactionId
+    );
+    await setItem(filteredTransactions);
+    fetchTransactions();
   }
   
   useFocusEffect(useCallback(() => {
@@ -133,7 +142,10 @@ export const Dashboard = () => {
                   data={transactions}
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
-                    <TransactionCard {...item} />
+                    <TransactionCard 
+                      {...item} 
+                      onDeleteTransaction={handleDeleteTransaction}
+                    />
                   )}
                 />
               </>
