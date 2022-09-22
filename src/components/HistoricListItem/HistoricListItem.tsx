@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { MotiView } from 'moti';
 
 //types
 import {HistoricListItemProps} from './types';
@@ -12,9 +13,28 @@ export const HistoricListItem: FC<HistoricListItemProps> = ({
   amount,
 }) => {
   return (
-    <Container flagColor={color}>
-      <Title>{title}</Title>
-      <Amount>{amount}</Amount>
-    </Container>
+    <MotiView
+      from={{
+        opacity: 0,
+        transform: [
+          {translateY: 50},
+        ],
+      }}
+      animate={{
+        opacity: 1,
+        transform: [
+          {translateY: 0},
+        ],
+      }}
+      transition={{
+        type: 'timing',
+        duration: 600,
+      }}
+    >
+      <Container flagColor={color}>
+        <Title>{title}</Title>
+        <Amount>{amount}</Amount>
+      </Container>
+    </MotiView>
   );
 }
