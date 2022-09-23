@@ -92,6 +92,7 @@ The following tools were used in the construction of project:
 - **[React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)**
 - **[React Native Modal](https://www.npmjs.com/package//react-native-modal)**
 - **[Victory Native](https://formidable.com/open-source/victory/docs/)**
+- **[Moti](https://moti.fyi/)**
 
 <hr>
 
