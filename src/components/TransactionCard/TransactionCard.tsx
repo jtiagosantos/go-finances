@@ -4,6 +4,9 @@ import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
 import { MotiView, useAnimationState } from 'moti';
 
+//components
+import { AnimatedIcon } from './AnimatedIcon';
+
 //types
 import { TransactionCardProps } from './types';
 
@@ -109,64 +112,37 @@ export const TransactionCard: FC<TransactionCardProps> = ({
           </S.Category>
           <S.Date>{date}</S.Date>
         </S.Footer>
-        <MotiView
-          transition={{
-            type: 'timing',
-            duration: 600,
+        <AnimatedIcon 
+          icon={{
+            name: 'more-vertical',
+            size: 24,
+            color: colors.title,
           }}
-          state={moreIconAnimationState}
+          animationState={moreIconAnimationState}
           style={styles.moreIcon}
-        >
-          <TouchableOpacity
-            activeOpacity={.6} 
-            onPress={handleToggleCard}
-          >
-            <Feather 
-              name='more-vertical'
-              size={24}
-              color={colors.title}
-            />
-          </TouchableOpacity>
-        </MotiView>
-        <MotiView
-          transition={{
-            type: 'timing',
-            duration: 600,
+          onPress={handleToggleCard}
+        />
+        <AnimatedIcon 
+          icon={{
+            name: 'x',
+            size: 24,
+            color: colors.title,
           }}
-          state={closeIconAnimationState}
+          animationState={closeIconAnimationState}
           style={styles.closeIcon}
-        >
-          <TouchableOpacity
-            activeOpacity={.6} 
-            onPress={handleToggleCard}
-          >
-            <Feather 
-              name='x'
-              size={24}
-              color={colors.title}
-            />
-          </TouchableOpacity>
-        </MotiView>
+          onPress={handleToggleCard}
+        />
       </S.Card>
-      <MotiView 
-        transition={{
-          type: 'timing',
-          duration: 600,
+      <AnimatedIcon 
+        icon={{
+          name: 'trash-2',
+          size: 36,
+          color: colors.text,
         }}
-        state={trashIconAnimationState}
+        animationState={trashIconAnimationState}
         style={styles.trashIcon}
-      >
-        <TouchableOpacity 
-          activeOpacity={.6} 
-          onPress={() => onDeleteTransaction(id)}
-        >
-          <Feather 
-            name='trash-2'
-            size={36}
-            color={colors.text}
-          />
-        </TouchableOpacity>
-      </MotiView>
+        onPress={() => onDeleteTransaction(id)}
+      />
     </MotiView>
   );
 }
