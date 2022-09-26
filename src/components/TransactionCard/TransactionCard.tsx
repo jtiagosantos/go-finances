@@ -31,14 +31,14 @@ export const TransactionCard: FC<TransactionCardProps> = ({
   }[transactionType];
 
   const cardAnimationState = useAnimationState({
-    centralized: {
+    from: {
       translateX: 0,
     },
-    left: {
+    to: {
       translateX: -80,
     },
   });
-  const iconAnimationState = useAnimationState({
+  const trashIconAnimationState = useAnimationState({
     from: {
       opacity: 0,
       rotate: '100deg',
@@ -46,22 +46,46 @@ export const TransactionCard: FC<TransactionCardProps> = ({
     to: {
       opacity: 1,
       rotate: '0deg',
-    }
+    },
+  });
+  const moreIconAnimationState = useAnimationState({
+    from: {
+      opacity: 0,
+    },
+    to: {
+      opacity: 1,
+    },
+  });
+  const closeIconAnimationState = useAnimationState({
+    from: {
+      opacity: 0,
+      rotate: '100deg',
+    },
+    to: {
+      opacity: 1,
+      rotate: '0deg',
+    },
   });
 
   const handleToggleCard = () => {
-    if (cardAnimationState.current === 'left') {
-      cardAnimationState.transitionTo('centralized');
-      iconAnimationState.transitionTo('from');
+    if (cardAnimationState.current === 'to') {
+      cardAnimationState.transitionTo('from');
+      trashIconAnimationState.transitionTo('from');
+      moreIconAnimationState.transitionTo('to');
+      closeIconAnimationState.transitionTo('from');
     } else {
-      cardAnimationState.transitionTo('left');
-      iconAnimationState.transitionTo('to');
+      cardAnimationState.transitionTo('to');
+      trashIconAnimationState.transitionTo('to');
+      moreIconAnimationState.transitionTo('from');
+      closeIconAnimationState.transitionTo('to');
     }
   }
 
   useEffect(() => {
-    cardAnimationState.transitionTo('centralized');
-    iconAnimationState.transitionTo('from');
+    cardAnimationState.transitionTo('from');
+    trashIconAnimationState.transitionTo('from');
+    moreIconAnimationState.transitionTo('to');
+    closeIconAnimationState.transitionTo('from');
   }, []);
 
   return (
@@ -73,7 +97,7 @@ export const TransactionCard: FC<TransactionCardProps> = ({
       state={cardAnimationState}
       style={styles.container}
     >
-      <S.Card onPress={handleToggleCard}>
+      <S.Card>
         <S.Title>{name}</S.Title>
         <S.Amount color={amountColor}>
           {transactionType === 'outflow' && '- '}{amount}
@@ -85,16 +109,57 @@ export const TransactionCard: FC<TransactionCardProps> = ({
           </S.Category>
           <S.Date>{date}</S.Date>
         </S.Footer>
+        <MotiView
+          transition={{
+            type: 'timing',
+            duration: 600,
+          }}
+          state={moreIconAnimationState}
+          style={styles.moreIcon}
+        >
+          <TouchableOpacity
+            activeOpacity={.6} 
+            onPress={handleToggleCard}
+          >
+            <Feather 
+              name='more-vertical'
+              size={24}
+              color={colors.title}
+            />
+          </TouchableOpacity>
+        </MotiView>
+        <MotiView
+          transition={{
+            type: 'timing',
+            duration: 600,
+          }}
+          state={closeIconAnimationState}
+          style={styles.closeIcon}
+        >
+          <TouchableOpacity
+            activeOpacity={.6} 
+            onPress={handleToggleCard}
+          >
+            <Feather 
+              name='x'
+              size={24}
+              color={colors.title}
+            />
+          </TouchableOpacity>
+        </MotiView>
       </S.Card>
       <MotiView 
         transition={{
           type: 'timing',
           duration: 600,
         }}
-        state={iconAnimationState}
-        style={styles.icon}
+        state={trashIconAnimationState}
+        style={styles.trashIcon}
       >
-        <TouchableOpacity onPress={() => onDeleteTransaction(id)}>
+        <TouchableOpacity 
+          activeOpacity={.6} 
+          onPress={() => onDeleteTransaction(id)}
+        >
           <Feather 
             name='trash-2'
             size={36}
@@ -112,8 +177,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {
+  trashIcon: {
     position: 'absolute',
     right: -64,
+  },
+  moreIcon: {
+    position: 'absolute',
+    right: 17,
+    top: 17,
+  },
+  closeIcon: {
+    position: 'absolute',
+    right: 17,
+    top: 17,
   }
 });
