@@ -38,11 +38,13 @@
 
 ## ⚙️ Features
 
-- [x] See all tasks
-- [x] Add a new task
-- [x] Mark a task as done
-- [x] Delete a task   
-- [x] See tasks quantity 
+- [x] Social Login with Google
+- [x] Social login with Apple
+- [x] See all transactions
+- [x] Add a new transaction
+- [x] Delete a transaction
+- [x] View pie chart per month
+- [x] SignOut
 
 <hr>
 
